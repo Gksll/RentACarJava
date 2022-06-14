@@ -22,6 +22,8 @@ import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
 
+import lombok.var;
+
 @RestController
 @RequestMapping("api/cars")
 public class CarsController {

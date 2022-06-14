@@ -23,6 +23,8 @@ public class User {
 	private int Id;
 	@Column(name = "first_name")
 	private String firstName;
+	@Column(name = "birth_year")
+	private Integer birthYear;
 	@Column(name = "last_name")
 	private String lastName;
 	@Column(name = "tc_No")

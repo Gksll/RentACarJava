@@ -14,4 +14,5 @@ private String lastName;
 private String tcNo;
 private String email;
 private String password;
+private Integer birthYear;
 }

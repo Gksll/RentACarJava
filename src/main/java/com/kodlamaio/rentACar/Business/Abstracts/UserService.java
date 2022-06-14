@@ -23,4 +23,6 @@ public interface UserService {
 	DataResult<List<GetAllUserResponse>> getAll();
 	
 	DataResult<List<GetAllUserResponse>> getAll(Integer pageNo,Integer pageSize);
+	
+	Result CheckIfRealPerson(User user);
 }

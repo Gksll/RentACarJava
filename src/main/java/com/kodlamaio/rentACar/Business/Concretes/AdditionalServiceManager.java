@@ -31,10 +31,7 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 	@Autowired
 	private ModelMapperService mapper;
 	@Autowired
-	private AdditionalItemRepository additionalItemRepository ;
-
-	
-
+	private AdditionalItemRepository additionalItemRepository;
 
 	@Override
 	public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) {

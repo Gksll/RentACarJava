@@ -15,8 +15,8 @@ public class CreateUserRequest {
 	private String firstName;
 
 	private String lastName;
+	private Integer birthYear;
 	@Min(value = 11)
-	
 	private String tcNo;
 	@Email
 	private String email;

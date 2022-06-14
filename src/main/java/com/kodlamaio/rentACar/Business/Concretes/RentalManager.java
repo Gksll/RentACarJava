@@ -19,10 +19,8 @@ import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessDataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
-import com.kodlamaio.rentACar.DataAccess.Abstracts.AdditionalServiceRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CarRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
-import com.kodlamaio.rentACar.Entities.Concretes.AdditionalService;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
 import com.kodlamaio.rentACar.Entities.Concretes.Rental;
 
