@@ -32,7 +32,7 @@ public class RentalsController {
 
 	@PostMapping("/add")
 	public Result add(@RequestBody CreateRentalRequest createRentalRequest) {
-		var result =rentalService.add(createRentalRequest);
+		var result = rentalService.add(createRentalRequest);
 		if (result.isSuccess()) {
 			return new SuccessResult("başarıyla kiralandı");
 		} else {

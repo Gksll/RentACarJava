@@ -1,11 +1,17 @@
 package com.kodlamaio.rentACar.Entities.Concretes;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,5 +40,7 @@ public class User {
 	@Column(name="password")
 	private String password;
 	
+	@OneToMany(mappedBy = "userId")
+	private List<Rental> rentals;
 
 }

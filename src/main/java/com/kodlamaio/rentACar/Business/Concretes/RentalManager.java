@@ -22,8 +22,10 @@ import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.Core.webservices.FindexServiceAdapter;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CarRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.UserRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
 import com.kodlamaio.rentACar.Entities.Concretes.Rental;
+import com.kodlamaio.rentACar.Entities.Concretes.User;
 
 @Service
 public class RentalManager implements RentalService {
@@ -36,6 +38,8 @@ public class RentalManager implements RentalService {
 	private ModelMapperService modelmapperService;
 	@Autowired
 	private FindexServiceAdapter adapter;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
@@ -43,6 +47,7 @@ public class RentalManager implements RentalService {
 		Car car = new Car();
 		Rental rentalToAdd = this.modelmapperService.forRequest().map(createRentalRequest, Rental.class);
 		Car carToGet = new Car();
+		User user = this.userRepository.findById(createRentalRequest.getUserId()).get();
 //		AdditionalService serviceToGetTotalPrice=additionalServiceRepository.findById(createRentalRequest.getAdditionalServiceId()).get();
 		long diff = createRentalRequest.getReturnDate().getTime() - createRentalRequest.getPickupDate().getTime();
 		long time = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
@@ -55,7 +60,7 @@ public class RentalManager implements RentalService {
 		} else {
 			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()) + 750);
 		}
-		if (checkFindexMinValue(carToGet.getMinFindexScore())) {
+		if (checkFindexMinValue(carToGet.getMinFindexScore(),user.getTcNo())) {
 			rentalRepository.save(rentalToAdd);
 			return new Result(true, "eklendi");
 		} else {
@@ -93,9 +98,9 @@ public class RentalManager implements RentalService {
 		return new SuccessDataResult<List<GetAllRentalResponse>>(responce);
 	}
 
-	public boolean checkFindexMinValue(int score) {
+	public boolean checkFindexMinValue(int score, String tc) {
 		boolean state = false;
-		if (adapter.CheckFindexScore("")> score) {
+		if (adapter.CheckFindexScore(tc)> score) {
 			state = true;
 		} else {
 			state = false;

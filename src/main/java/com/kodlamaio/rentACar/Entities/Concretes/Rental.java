@@ -42,6 +42,10 @@ public class Rental {
 	private double totalPrice;
 	
 	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User userId;
+	
+	@ManyToOne
 	@JoinColumn(name = "car_id")
 	private Car car;
 	
