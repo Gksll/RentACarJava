@@ -44,6 +44,8 @@ public class Car {
 
 	@Column(name = "plaque")
 	private String plaque;
+	@Column(name = "min_findex")
+	private int minFindexScore;
 	
 	@Column(name = "pickupCityId")
 	private Integer pickupCityId;

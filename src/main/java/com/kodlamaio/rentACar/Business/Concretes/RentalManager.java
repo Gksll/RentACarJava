@@ -19,6 +19,7 @@ import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessDataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
+import com.kodlamaio.rentACar.Core.webservices.FindexServiceAdapter;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CarRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
@@ -26,37 +27,41 @@ import com.kodlamaio.rentACar.Entities.Concretes.Rental;
 
 @Service
 public class RentalManager implements RentalService {
-	
+
 	@Autowired
 	private RentalRepository rentalRepository;
 	@Autowired
 	private CarRepository carRepository;
 	@Autowired
 	private ModelMapperService modelmapperService;
+	@Autowired
+	private FindexServiceAdapter adapter;
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-		
+
 		Car car = new Car();
 		Rental rentalToAdd = this.modelmapperService.forRequest().map(createRentalRequest, Rental.class);
-		Car carToGetPrice = new Car();
+		Car carToGet = new Car();
 //		AdditionalService serviceToGetTotalPrice=additionalServiceRepository.findById(createRentalRequest.getAdditionalServiceId()).get();
 		long diff = createRentalRequest.getReturnDate().getTime() - createRentalRequest.getPickupDate().getTime();
 		long time = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-		carToGetPrice = carRepository.findById(createRentalRequest.getCarId()).get();
+		carToGet = carRepository.findById(createRentalRequest.getCarId()).get();
 		car.setId(createRentalRequest.getCarId());
 		rentalToAdd.setCar(car);
 		rentalToAdd.setTotalDays((int) time);
-		if (carToGetPrice.getReturnCityId() == carToGetPrice.getPickupCityId()) {
-			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGetPrice.getDailyPrice()));
+		if (carToGet.getReturnCityId() == carToGet.getPickupCityId()) {
+			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()));
 		} else {
-			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGetPrice.getDailyPrice())+ 750);
+			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()) + 750);
 		}
-
-		rentalRepository.save(rentalToAdd);
-		return new SuccessResult();
+		if (checkFindexMinValue(carToGet.getMinFindexScore())) {
+			rentalRepository.save(rentalToAdd);
+			return new Result(true, "eklendi");
+		} else {
+			return new Result(false, "findex puanı yetersiz");
+		}
 	}
-
 	// Update edilirken fiyat bilgisi gelmiyor, bağlı nesneleri kontrol et
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
@@ -88,4 +93,13 @@ public class RentalManager implements RentalService {
 		return new SuccessDataResult<List<GetAllRentalResponse>>(responce);
 	}
 
+	public boolean checkFindexMinValue(int score) {
+		boolean state = false;
+		if (adapter.CheckFindexScore("")> score) {
+			state = true;
+		} else {
+			state = false;
+		}
+		return state;
+	}
 }

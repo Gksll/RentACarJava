@@ -15,6 +15,7 @@ import com.kodlamaio.rentACar.Business.Requests.rental.UpdateRentalRequest;
 import com.kodlamaio.rentACar.Business.Responces.rental.GetAllRentalResponse;
 import com.kodlamaio.rentACar.Business.Responces.rental.GetRentalResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
+import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Rental;
@@ -31,8 +32,12 @@ public class RentalsController {
 
 	@PostMapping("/add")
 	public Result add(@RequestBody CreateRentalRequest createRentalRequest) {
-		rentalService.add(createRentalRequest);
-		return new SuccessResult();
+		var result =rentalService.add(createRentalRequest);
+		if (result.isSuccess()) {
+			return new SuccessResult("başarıyla kiralandı");
+		} else {
+			return new ErrorResult("eklenemedi sorun!");
+		}
 	}
 
 	@PostMapping("/update")

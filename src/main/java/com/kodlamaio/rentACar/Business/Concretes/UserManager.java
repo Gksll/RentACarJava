@@ -30,7 +30,7 @@ public class UserManager implements UserService {
 	UserRepository userRepository;
 	@Autowired
 	private ModelMapperService mapper;
-	
+
 	private MernisServiceAdapter adapter;
 
 	public UserManager(MernisServiceAdapter adapter) {
@@ -43,14 +43,14 @@ public class UserManager implements UserService {
 		if (CheckIfRealPerson(user).isSuccess()) {
 			this.userRepository.save(user);
 			return new SuccessResult();
-		}
-		else {
+		} else {
+			
 			return new ErrorResult();
 		}
 //		this.userRepository.save(user);
 //		return new SuccessResult();
 	}
-	
+
 	@Override
 	public Result update(UpdateUserRequest updateUserRequest) {
 		User userToUpdate = this.mapper.forRequest().map(updateUserRequest, User.class);
