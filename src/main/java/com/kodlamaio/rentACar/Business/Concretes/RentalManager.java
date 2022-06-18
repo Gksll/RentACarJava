@@ -53,9 +53,9 @@ public class RentalManager implements RentalService {
 		long time = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 		carToGet = carRepository.findById(createRentalRequest.getCarId()).get();
 		car.setId(createRentalRequest.getCarId());
-		rentalToAdd.setCar(car);
+		rentalToAdd.setCar(carToGet);
 		rentalToAdd.setTotalDays((int) time);
-		if (carToGet.getReturnCityId() == carToGet.getPickupCityId()) {
+		if (carToGet.getReturnCityId() == carToGet.getPickupCityId() && carToGet.getState()=="avaliable") {
 			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()));
 		} else {
 			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()) + 750);

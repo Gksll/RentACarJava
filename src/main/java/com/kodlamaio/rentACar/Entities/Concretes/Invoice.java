@@ -1,8 +1,5 @@
 package com.kodlamaio.rentACar.Entities.Concretes;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -21,35 +17,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rentals")
-public class Rental {
+@Table(name = "invoices")
+public class Invoice {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 	
-	@Column(name = "pickup_date")
-	private Date pickUpdate;
-	
-	@Column(name = "return_date")
-	private Date returnDate;
-	
-	@Column(name = "total_days")
-	private double totalDays;
-	
-	@Column(name = "total_price")
-	private double totalPrice;
+	@Column(name = "invoice_number")
+	private int invoiceNumber;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User userId;
+	@JoinColumn(name = "rental_details_id")
+	private RentalDetail rentalDetail;
 	
-	@ManyToOne
-	@JoinColumn(name = "car_id")
-	private Car car;
-	
-	@OneToMany(mappedBy = "rental")
-	private List<RentalDetail> rentalDetail;
-	
-
 }

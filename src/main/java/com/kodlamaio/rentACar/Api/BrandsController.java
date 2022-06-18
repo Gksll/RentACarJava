@@ -16,6 +16,7 @@ import com.kodlamaio.rentACar.Business.Requests.brand.UpdateBrandRequest;
 import com.kodlamaio.rentACar.Business.Responces.brand.GetBrandResponse;
 import com.kodlamaio.rentACar.Business.Responces.brand.GetAllBrandResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
+import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Brand;
@@ -30,8 +31,14 @@ public class BrandsController {
 	
 	@PostMapping("/add")
 	public Result add( @RequestBody CreateBrandRequest createBrandRequest) {
-		brandService.add(createBrandRequest);
-		return new SuccessResult();
+		var result=brandService.add(createBrandRequest);
+		if (result.isSuccess()) {
+			return new SuccessResult("eklendim");
+		} else {
+			return new ErrorResult("eklenemedim");
+
+		}
+		
 	}
 	@PostMapping("/delete")
 	public Result delete(DeleteBrandRequest deleteBrandRequest) {

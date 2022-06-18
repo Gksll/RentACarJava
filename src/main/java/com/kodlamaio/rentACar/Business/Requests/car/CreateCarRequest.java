@@ -26,4 +26,5 @@ public class CreateCarRequest {
 	private String kmCount;
 	private Integer pickupCityId;
 	private Integer returnCityId;
+	private int minFindexScore;
 }

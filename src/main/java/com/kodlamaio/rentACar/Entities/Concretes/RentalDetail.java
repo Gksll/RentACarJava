@@ -19,31 +19,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars","rentals"})
-@Table(name="additional_service")
-
-public class AdditionalService {
-	@Id()
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","invoices"})
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "rental_details")
+public class RentalDetail {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
-	
-	@Column(name="day")
-	private int day;
 	
 	@Column(name="total_price")
 	private double totalPrice;
+
+	@ManyToOne
+	@JoinColumn(name = "rental_id")
+	private Rental rental;
 	
 	@ManyToOne
-	@JoinColumn(name = "additionalItem_id")
-	private AdditionalItem additionalItem;
+	@JoinColumn(name = "additional_service_id")
+	private AdditionalService additionalService;
 	
-	@OneToMany(mappedBy = "additionalService")
-	private List<RentalDetail> rentalDetail;
-	
+	@OneToMany(mappedBy = "rentalDetail")
+	private List<Invoice> invoices;
 	
 	
 }

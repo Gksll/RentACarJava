@@ -14,7 +14,6 @@ public class FindexServiceAdapter {
 		findexScore = new HashMap<String, Integer>();
 		int score = random.nextInt(1, 1900);
 		findexScore.put(tcNo, score);
-		System.out.println(score);
 		return score;
 	}
 }

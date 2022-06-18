@@ -40,7 +40,7 @@ public class Car {
 	
 	
 	@Column(name = "state")
-	private String state="avaliable";
+	private String state="available";
 
 	@Column(name = "plaque")
 	private String plaque;

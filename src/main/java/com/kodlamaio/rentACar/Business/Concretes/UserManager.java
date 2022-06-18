@@ -80,7 +80,7 @@ public class UserManager implements UserService {
 
 		return new SuccessDataResult<List<GetAllUserResponse>>(responce);
 	}
-
+	
 	@Override
 	public DataResult<List<GetAllUserResponse>> getAll(Integer pageNo, Integer pageSize) {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
