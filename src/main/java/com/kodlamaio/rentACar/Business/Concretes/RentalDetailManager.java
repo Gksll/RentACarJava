@@ -27,6 +27,7 @@ public class RentalDetailManager implements RentalDetailService {
 	private RentalDetailRepository rentalDetailRepository;
 	@Autowired
 	private ModelMapperService mapperService;
+	
 
 	@Override
 	public Result add(createRentalDetailRequest createRentalDetailRequest) {

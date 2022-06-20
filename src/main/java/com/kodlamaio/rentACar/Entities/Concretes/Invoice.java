@@ -27,6 +27,9 @@ public class Invoice {
 	@Column(name = "invoice_number")
 	private int invoiceNumber;
 	
+	@Column(name = "total_price")
+	private double totalPrice;
+	
 	@ManyToOne
 	@JoinColumn(name = "rental_details_id")
 	private RentalDetail rentalDetail;

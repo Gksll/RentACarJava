@@ -13,5 +13,6 @@ public class CreateInvoiceRequest {
 	private int id;
 	private int invoiceNumber;
 	private int rentalDetailId;
+	private double totalPrice;
 	
 }
