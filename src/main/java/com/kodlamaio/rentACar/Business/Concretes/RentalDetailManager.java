@@ -17,7 +17,11 @@ import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessDataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.AdditionalServiceRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalDetailRepository;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
+import com.kodlamaio.rentACar.Entities.Concretes.AdditionalService;
+import com.kodlamaio.rentACar.Entities.Concretes.Rental;
 import com.kodlamaio.rentACar.Entities.Concretes.RentalDetail;
 
 @Service
@@ -26,12 +30,19 @@ public class RentalDetailManager implements RentalDetailService {
 	@Autowired
 	private RentalDetailRepository rentalDetailRepository;
 	@Autowired
+	private RentalRepository rentalRepository;
+	@Autowired
+	private AdditionalServiceRepository additionalServiceRepository;
+	@Autowired
 	private ModelMapperService mapperService;
-	
 
 	@Override
 	public Result add(createRentalDetailRequest createRentalDetailRequest) {
 		RentalDetail rentalDetail = mapperService.forRequest().map(createRentalDetailRequest, RentalDetail.class);
+		Rental rental = rentalRepository.findById(rentalDetail.getRental().getId()).get();
+		AdditionalService additionalService = additionalServiceRepository
+				.findById(rentalDetail.getAdditionalService().getId()).get();
+		rentalDetail.setTotalPrice(rental.getTotalPrice() + additionalService.getTotalPrice());
 		rentalDetailRepository.save(rentalDetail);
 		return new SuccessResult("Kira detay eklendi");
 	}

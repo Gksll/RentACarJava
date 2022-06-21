@@ -22,10 +22,10 @@ import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.Core.webservices.FindexServiceAdapter;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CarRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
-import com.kodlamaio.rentACar.DataAccess.Abstracts.UserRepository;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.CustomerRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
 import com.kodlamaio.rentACar.Entities.Concretes.Rental;
-import com.kodlamaio.rentACar.Entities.Concretes.User;
+import com.kodlamaio.rentACar.Entities.Concretes.Customer;
 
 @Service
 public class RentalManager implements RentalService {
@@ -39,35 +39,35 @@ public class RentalManager implements RentalService {
 	@Autowired
 	private FindexServiceAdapter adapter;
 	@Autowired
-	private UserRepository userRepository;
+	private CustomerRepository customerRepository;
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
 
-		Car car = new Car();
 		Rental rentalToAdd = this.modelmapperService.forRequest().map(createRentalRequest, Rental.class);
-		Car carToGet = new Car();
-		User user = this.userRepository.findById(createRentalRequest.getUserId()).get();
-//		AdditionalService serviceToGetTotalPrice=additionalServiceRepository.findById(createRentalRequest.getAdditionalServiceId()).get();
+		Car carToGet = carRepository.findById(createRentalRequest.getCarId()).get();
+		Customer customer = this.customerRepository.findById(createRentalRequest.getCustomerId()).get();
 		long diff = createRentalRequest.getReturnDate().getTime() - createRentalRequest.getPickupDate().getTime();
 		long time = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-		carToGet = carRepository.findById(createRentalRequest.getCarId()).get();
-		car.setId(createRentalRequest.getCarId());
 		rentalToAdd.setCar(carToGet);
 		rentalToAdd.setTotalDays((int) time);
-		if (carToGet.getReturnCityId() == carToGet.getPickupCityId() && carToGet.getState()=="avaliable") {
+		if (carToGet.getReturnCityId() == carToGet.getPickupCityId() && carToGet.getState() == "avaliable") {
+
 			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()));
-		} else {
+		}
+		else {
 			rentalToAdd.setTotalPrice((rentalToAdd.getTotalDays() * carToGet.getDailyPrice()) + 750);
 		}
-		if (checkFindexMinValue(carToGet.getMinFindexScore(),user.getTcNo())) {
+		if (checkFindexMinValue(carToGet.getMinFindexScore(), customer.getTcNo())) {
+			carToGet.setState("rented");
 			rentalRepository.save(rentalToAdd);
 			return new Result(true, "eklendi");
-		} else {
+		}
+		else {
 			return new Result(false, "findex puanı yetersiz");
 		}
 	}
-	// Update edilirken fiyat bilgisi gelmiyor, bağlı nesneleri kontrol et
+
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
 		Rental rentalToUpdate = this.modelmapperService.forRequest().map(updateRentalRequest, Rental.class);
@@ -100,7 +100,7 @@ public class RentalManager implements RentalService {
 
 	public boolean checkFindexMinValue(int score, String tc) {
 		boolean state = false;
-		if (adapter.CheckFindexScore(tc)> score) {
+		if (adapter.CheckFindexScore(tc) > score) {
 			state = true;
 		} else {
 			state = false;

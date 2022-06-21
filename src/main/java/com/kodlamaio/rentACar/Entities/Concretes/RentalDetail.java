@@ -32,6 +32,9 @@ public class RentalDetail {
 	
 	@Column(name="total_price")
 	private double totalPrice;
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 
 	@ManyToOne
 	@JoinColumn(name = "rental_id")
