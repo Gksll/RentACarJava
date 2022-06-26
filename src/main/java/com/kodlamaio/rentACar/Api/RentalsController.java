@@ -15,9 +15,7 @@ import com.kodlamaio.rentACar.Business.Requests.rental.UpdateRentalRequest;
 import com.kodlamaio.rentACar.Business.Responces.rental.GetAllRentalResponse;
 import com.kodlamaio.rentACar.Business.Responces.rental.GetRentalResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
-import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Rental;
 
 @RestController
@@ -32,35 +30,26 @@ public class RentalsController {
 
 	@PostMapping("/add")
 	public Result add(@RequestBody CreateRentalRequest createRentalRequest) {
-		var result = rentalService.add(createRentalRequest);
-		if (result.isSuccess()) {
-			return new SuccessResult("başarıyla kiralandı");
-		} else {
-			return new ErrorResult("eklenemedi sorun!");
-		}
+		return rentalService.add(createRentalRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateRentalRequest updateRentalRequest) {
-		rentalService.update(updateRentalRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateRentalRequest updateRentalRequest) {
+		return rentalService.update(updateRentalRequest);
 	}
 
 	@PostMapping("/delete")
-	public Result delete(@RequestBody DeleteRentalRequest deleteRentalRequest) {
-		rentalService.delete(deleteRentalRequest);
-		return new SuccessResult();
+	public Result Delete(DeleteRentalRequest deleteRentalRequest) {
+		return rentalService.delete(deleteRentalRequest);
 	}
 
-	@GetMapping("/getbyid")
-	public DataResult<Rental> getById(GetRentalResponse getRentalResponse) {
-
-		return this.rentalService.getById(getRentalResponse);
+	@GetMapping("/getById")
+	public DataResult<Rental> GetById(GetRentalResponse getRentalResponse) {
+		return rentalService.getById(getRentalResponse);
 	}
 
-	@GetMapping("/getall")
-	public DataResult<List<GetAllRentalResponse>> getall() {
+	@GetMapping("/getAll")
+	public DataResult<List<GetAllRentalResponse>> GetAll() {
 		return this.rentalService.getAll();
-//		return new SuccessDataResult<List<Rental>>(rentalService.getAll().getData());
 	}
 }

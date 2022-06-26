@@ -16,7 +16,6 @@ import com.kodlamaio.rentACar.Business.Responces.additionalService.GetAdditional
 import com.kodlamaio.rentACar.Business.Responces.additionalService.GetAllAdditionalServiceResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.AdditionalService;
 
 @RestController
@@ -29,34 +28,28 @@ public class AdditionalServicesController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateAdditionalServiceRequest additionalServiceRequest) {
-		additionalService.add(additionalServiceRequest);
-		return new SuccessResult();
+	public Result Add(@RequestBody CreateAdditionalServiceRequest additionalServiceRequest) {
+		return additionalService.add(additionalServiceRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateAdditionalServiceRequest updateAdditionalServiceRequest) {
-		additionalService.update(updateAdditionalServiceRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateAdditionalServiceRequest updateAdditionalServiceRequest) {
+		return additionalService.update(updateAdditionalServiceRequest);
 	}
 
 	@PostMapping("/delete")
-	public Result update(@RequestBody DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) {
-		additionalService.delete(deleteAdditionalServiceRequest);
-		return new SuccessResult();
+	public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) {
+		return additionalService.delete(deleteAdditionalServiceRequest);
 	}
 
-	@GetMapping("/getbyid")
-	public DataResult<AdditionalService> getbyid( GetAdditionalServiceResponse getAdditionalServiceResponse) {
-		
-		return this.additionalService.getById(getAdditionalServiceResponse);
-		
+	@GetMapping("/getById")
+	public DataResult<AdditionalService> GetById(GetAdditionalServiceResponse getAdditionalServiceResponse) {
+		return additionalService.getById(getAdditionalServiceResponse);
 	}
-	
-	@GetMapping("/getall")
-	public DataResult<List<GetAllAdditionalServiceResponse>> getall() {
 
-		return this.additionalService.getAll();
+	@GetMapping("/getAll")
+	public DataResult<List<GetAllAdditionalServiceResponse>> getAll() {
+		return additionalService.getAll();
 	}
 
 }

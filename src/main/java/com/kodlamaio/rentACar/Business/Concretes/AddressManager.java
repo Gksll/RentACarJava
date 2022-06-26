@@ -16,6 +16,7 @@ import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessDataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
+import com.kodlamaio.rentACar.Core.Utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.AddressRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.Address;
@@ -34,28 +35,31 @@ public class AddressManager implements AddressService {
 			address.setInvoiceAdress(address.getAddress());
 		}
 		addressRepository.save(address);
-		return new SuccessResult();
+		return new SuccessResult("added successfully");
 	}
 
 	@Override
 	public Result delete(DeleteAddressRequest deleteAddressRequest) {
+		checkIfAddressExistsById(deleteAddressRequest.getId());
 		Address address = this.mapperService.forRequest().map(deleteAddressRequest, Address.class);
 		addressRepository.delete(address);
-		return new SuccessResult();
+		return new SuccessResult("deleted successfully");
 	}
 
 	@Override
 	public Result update(UpdateAddressRequest updateAddressRequest) {
+		checkIfAddressExistsById(updateAddressRequest.getId());
 		Address addressToUpdate = this.mapperService.forRequest().map(updateAddressRequest, Address.class);
 		addressRepository.save(addressToUpdate);
-		return new SuccessResult("güncellendi");
+		return new SuccessResult("updated successfully");
 	}
 
 	@Override
 	public DataResult<Address> getById(GetAddressResponse getAddressResponse) {
+		checkIfAddressExistsById(getAddressResponse.getId());
 		Address addressToGet = this.mapperService.forRequest().map(getAddressResponse, Address.class);
 		addressToGet = addressRepository.findById(getAddressResponse.getId()).get();
-		return new SuccessDataResult<Address>(addressToGet);
+		return new SuccessDataResult<Address>(addressToGet,"listed successfully");
 	}
 
 	@Override
@@ -64,8 +68,14 @@ public class AddressManager implements AddressService {
 		List<GetAllAddressResponse> responce = addresses.stream()
 				.map(item -> this.mapperService.forResponce().map(item, GetAllAddressResponse.class))
 				.collect(Collectors.toList());
-
-		return new SuccessDataResult<List<GetAllAddressResponse>>(responce);
+		return new SuccessDataResult<List<GetAllAddressResponse>>(responce,"listed successfully");
 	}
-
+	
+	private void checkIfAddressExistsById(int id) 
+	{
+		boolean result = addressRepository.existsById(id);
+		if (result==false) {
+			throw new BusinessException("ADDRESS NOT EXISTS");
+		}
+	}
 }

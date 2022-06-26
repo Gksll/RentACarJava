@@ -12,4 +12,5 @@ public class GetAllAdditionalItemResponse {
 	private int id;
 	private String name;
 	private String description;
+	double price;
 }

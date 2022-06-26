@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","customer","car","rentalDetail"})
 @AllArgsConstructor
 @Table(name = "rentals")
 public class Rental {
@@ -29,7 +32,7 @@ public class Rental {
 	private int id;
 	
 	@Column(name = "pickup_date")
-	private Date pickUpdate;
+	private Date pickupDate;
 	
 	@Column(name = "return_date")
 	private Date returnDate;

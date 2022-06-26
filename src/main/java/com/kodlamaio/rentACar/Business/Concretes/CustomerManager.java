@@ -31,7 +31,7 @@ public class CustomerManager implements CustomerService {
 	@Autowired
 	CustomerRepository customerRepository;
 	@Autowired
-	private ModelMapperService mapper;
+	private ModelMapperService modelMapperService;
 
 	private MernisServiceAdapter adapter;
 
@@ -41,7 +41,7 @@ public class CustomerManager implements CustomerService {
 
 	@Override
 	public Result add(CreateCustomerRequest createCustomerRequest) {
-		Customer customer = this.mapper.forRequest().map(createCustomerRequest, Customer.class);
+		Customer customer = modelMapperService.forRequest().map(createCustomerRequest, Customer.class);
 		
 		if (CheckIfRealPerson(customer).isSuccess() && CheckCustomerExists(customer).isSuccess()) { 
 			this.customerRepository.save(customer);
@@ -54,7 +54,7 @@ public class CustomerManager implements CustomerService {
 
 	@Override
 	public Result update(UpdateCustomerRequest updateCustomerRequest) {
-		Customer userToUpdate = this.mapper.forRequest().map(updateCustomerRequest, Customer.class);
+		Customer userToUpdate = modelMapperService.forRequest().map(updateCustomerRequest, Customer.class);
 		customerRepository.save(userToUpdate);
 		return new SuccessResult();
 	}
@@ -67,7 +67,7 @@ public class CustomerManager implements CustomerService {
 
 	@Override
 	public DataResult<Customer> getById(GetCustomerResponse getCustomerResponse) {
-		Customer customer = this.mapper.forResponce().map(getCustomerResponse, Customer.class);
+		Customer customer = modelMapperService.forResponce().map(getCustomerResponse, Customer.class);
 		customer = customerRepository.findById(getCustomerResponse.getId()).get();
 		return new SuccessDataResult<Customer>(customer);
 	}
@@ -76,7 +76,7 @@ public class CustomerManager implements CustomerService {
 	public DataResult<List<GetAllCustomerResponse>> getAll() {
 		List<Customer> customers = this.customerRepository.findAll();
 		List<GetAllCustomerResponse> responce = customers.stream()
-				.map(item -> this.mapper.forResponce().map(item, GetAllCustomerResponse.class))
+				.map(item -> modelMapperService.forResponce().map(item, GetAllCustomerResponse.class))
 				.collect(Collectors.toList());
 
 		return new SuccessDataResult<List<GetAllCustomerResponse>>(responce);
@@ -87,18 +87,18 @@ public class CustomerManager implements CustomerService {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 		List<Customer> customers = this.customerRepository.findAll(pageable).getContent();
 		List<GetAllCustomerResponse> responce = customers.stream()
-				.map(item -> this.mapper.forResponce().map(item, GetAllCustomerResponse.class))
+				.map(item -> modelMapperService.forResponce().map(item, GetAllCustomerResponse.class))
 				.collect(Collectors.toList());
 
 		return new SuccessDataResult<List<GetAllCustomerResponse>>(responce);
 	}
 
-	@Override
+	
 	public Result CheckIfRealPerson(Customer customer) {
 		return new Result(adapter.CheckIfRealPerson(customer));
 	}
 
-	@Override
+	
 	public Result CheckCustomerExists(Customer customer) {
 		boolean state=false;
 		List<Customer> customers = customerRepository.findAll();

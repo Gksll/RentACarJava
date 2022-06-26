@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CreateAdditionalItemRequest {
 	private String name;
 	private String description;
-	private Integer price;
+	private double price;
 }

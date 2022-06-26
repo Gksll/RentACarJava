@@ -16,7 +16,6 @@ import com.kodlamaio.rentACar.Business.Responces.maintenance.GetAllMaintenanceRe
 import com.kodlamaio.rentACar.Business.Responces.maintenance.GetMaintenanceResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Maintenance;
 
 @RestController
@@ -28,32 +27,30 @@ public class MaintenancesController {
 	public MaintenancesController(MaintenanceService maintenanceService) {
 		this.maintenanceService = maintenanceService;
 	}
-	
+
 	@PostMapping("/add")
-	public Result add( @RequestBody CreateMaintenanceRequest createMaintenanceRequest) {
-		maintenanceService.add(createMaintenanceRequest);
-		return new SuccessResult();
+	public Result Add(@RequestBody CreateMaintenanceRequest createMaintenanceRequest) {
+		return maintenanceService.add(createMaintenanceRequest);
 	}
+
 	@PostMapping("/update")
-	public Result update( @RequestBody UpdateMaintenanceRequest updateMaintenanceRequest) {
-		maintenanceService.update(updateMaintenanceRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateMaintenanceRequest updateMaintenanceRequest) {
+		return maintenanceService.update(updateMaintenanceRequest);
 	}
+
 	@PostMapping("/delete")
-	public Result delete( @RequestBody DeleteMaintenanceRequest deleteMaintenanceRequest) {
-		maintenanceService.delete(deleteMaintenanceRequest);
-		return new SuccessResult();
+	public Result Delete(DeleteMaintenanceRequest deleteMaintenanceRequest) {
+		return maintenanceService.delete(deleteMaintenanceRequest);
 	}
-	@GetMapping("/getbyid")
-	public DataResult<Maintenance> getById( GetMaintenanceResponse maintenanceResponse) {
-		
-		return this.maintenanceService.getById(maintenanceResponse);   
-		
+
+	@GetMapping("/getById")
+	public DataResult<Maintenance> GetById(GetMaintenanceResponse getMaintenanceResponse) {
+		return maintenanceService.getById(getMaintenanceResponse);
 	}
-	@GetMapping("/getall")
-	public DataResult<List<GetAllMaintenanceResponse>> getAll( ) {
-		return this.maintenanceService.getAll();
+
+	@GetMapping("/getAll")
+	public DataResult<List<GetAllMaintenanceResponse>> GetAll() {
+		return maintenanceService.getAll();
 	}
-	
-	
+
 }

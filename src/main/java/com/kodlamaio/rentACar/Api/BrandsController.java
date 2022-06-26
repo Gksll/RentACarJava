@@ -2,7 +2,6 @@ package com.kodlamaio.rentACar.Api;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,53 +12,44 @@ import com.kodlamaio.rentACar.Business.Abstracts.BrandService;
 import com.kodlamaio.rentACar.Business.Requests.brand.CreateBrandRequest;
 import com.kodlamaio.rentACar.Business.Requests.brand.DeleteBrandRequest;
 import com.kodlamaio.rentACar.Business.Requests.brand.UpdateBrandRequest;
-import com.kodlamaio.rentACar.Business.Responces.brand.GetBrandResponse;
 import com.kodlamaio.rentACar.Business.Responces.brand.GetAllBrandResponse;
+import com.kodlamaio.rentACar.Business.Responces.brand.GetBrandResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
-import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Brand;
 
 @RestController
 @RequestMapping("api/brands")
 public class BrandsController {
-	@Autowired
 	private BrandService brandService;
 
-	
-	
-	@PostMapping("/add")
-	public Result add( @RequestBody CreateBrandRequest createBrandRequest) {
-		var result=brandService.add(createBrandRequest);
-		if (result.isSuccess()) {
-			return new SuccessResult("eklendim");
-		} else {
-			return new ErrorResult("eklenemedim");
-
-		}
-		
+	public BrandsController(BrandService brandService) {
+		this.brandService = brandService;
 	}
+
+	@PostMapping("/add")
+	public Result Add(@RequestBody CreateBrandRequest createBrandRequest) {
+		return brandService.add(createBrandRequest);
+	}
+
 	@PostMapping("/delete")
-	public Result delete(DeleteBrandRequest deleteBrandRequest) {
-		brandService.delete(deleteBrandRequest);
-		return new SuccessResult();
+	public Result Delete(DeleteBrandRequest deleteBrandRequest) {
+		return brandService.delete(deleteBrandRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) {
-		brandService.update(updateBrandRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateBrandRequest updateBrandRequest) {
+		return brandService.update(updateBrandRequest);
+
 	}
 
-	@GetMapping("/getall")
+	@GetMapping("/getAll")
 	public DataResult<List<GetAllBrandResponse>> GetAll() {
-		return this.brandService.getall();
-//		return new SuccessDataResult<List<Brand>>(brandService.getall().getData());
+		return brandService.getAll();
 	}
-	@GetMapping("/getbyid")
+
+	@GetMapping("/getById")
 	public DataResult<Brand> GetById(GetBrandResponse getBrandResponce) {
-		return this.brandService.getById(getBrandResponce);
-//		return new SuccessDataResult<Brand>(brandService.getById(id).getData());
+		return brandService.getById(getBrandResponce);
 	}
 }

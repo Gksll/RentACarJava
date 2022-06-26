@@ -1,5 +1,6 @@
 package com.kodlamaio.rentACar.Entities.Concretes;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars","rentals"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars","rentals"})
+//OrderedAdditionalItem h2 developer
 @Table(name="additional_service")
 
 public class AdditionalService {
@@ -36,6 +36,12 @@ public class AdditionalService {
 	
 	@Column(name="total_price")
 	private double totalPrice;
+	
+	@Column(name = "send_date")
+	private Date sendDate;
+	
+	@Column(name = "return_date")
+	private Date returnDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "additionalItem_id")

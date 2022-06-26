@@ -24,9 +24,6 @@ public interface CustomerService {
 	
 	DataResult<List<GetAllCustomerResponse>> getAll(Integer pageNo,Integer pageSize);
 	
-	Result CheckIfRealPerson(Customer customer);
-	Result CheckCustomerExists(Customer customer);
-	
 	DataResult<String> GetAddressByCustomerId(GetCustomerResponse getCustomerResponse);
 	
 	DataResult<String> GetInvoicesAddressByCustomerId(GetCustomerResponse getCustomerResponse);

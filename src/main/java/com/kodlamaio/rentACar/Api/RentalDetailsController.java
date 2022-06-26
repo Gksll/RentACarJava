@@ -2,7 +2,6 @@ package com.kodlamaio.rentACar.Api;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,48 +15,45 @@ import com.kodlamaio.rentACar.Business.Requests.rentalDetails.updateRentalDetail
 import com.kodlamaio.rentACar.Business.Responces.rentalDetails.getAllRentalDetailResponse;
 import com.kodlamaio.rentACar.Business.Responces.rentalDetails.getRentalDetailResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
-import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.RentalDetail;
 
 @RestController
 @RequestMapping("api/rentaldetails")
 public class RentalDetailsController {
-@Autowired
+
 	private RentalDetailService rentalDetailService;
 
+	public RentalDetailsController(RentalDetailService rentalDetailService) {
+		this.rentalDetailService = rentalDetailService;
+	}
+
 	@PostMapping("/add")
-	public Result add(@RequestBody createRentalDetailRequest createRentalRequest) {
-		var result = rentalDetailService.add(createRentalRequest);
-		if (result.isSuccess()) {
-			return new SuccessResult(result.getMessage());
-		} else {
-			return new ErrorResult(result.getMessage());
-		}
+	public Result Add(@RequestBody createRentalDetailRequest createRentalDetailRequest) {
+		return rentalDetailService.add(createRentalDetailRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody updateRentalDetailRequest updateRentalRequest) {
-		rentalDetailService.update(updateRentalRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody updateRentalDetailRequest updateRentalDetailRequest) {
+		return rentalDetailService.update(updateRentalDetailRequest);
+		
 	}
 
 	@PostMapping("/delete")
-	public Result delete(@RequestBody deleteRentalDetailRequest deleteRentalRequest) {
-		rentalDetailService.delete(deleteRentalRequest);
-		return new SuccessResult();
+	public Result Delete(deleteRentalDetailRequest deleteRentalDetailRequest) {
+		return rentalDetailService.delete(deleteRentalDetailRequest);
+
 	}
 
-	@GetMapping("/getbyid")
-	public DataResult<RentalDetail> getById(getRentalDetailResponse getRentalResponse) {
+	@GetMapping("/getById")
+	public DataResult<RentalDetail> GetById(getRentalDetailResponse getRentalDetailResponse) {
 
-		return this.rentalDetailService.getById(getRentalResponse);
+		return rentalDetailService.getById(getRentalDetailResponse);
 	}
 
-	@GetMapping("/getall")
-	public DataResult<List<getAllRentalDetailResponse>> getall() {
-		return this.rentalDetailService.getAll();
+	@GetMapping("/getAll")
+	public DataResult<List<getAllRentalDetailResponse>> GetAll() {
+		return rentalDetailService.getAll();
 
 	}
 }

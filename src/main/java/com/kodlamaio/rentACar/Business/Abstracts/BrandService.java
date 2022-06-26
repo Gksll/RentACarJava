@@ -13,10 +13,10 @@ import com.kodlamaio.rentACar.Entities.Concretes.Brand;
 
 public interface BrandService {
 Result add(CreateBrandRequest createBrandRequest);
-//responce=dto request=brand patern
 Result delete(DeleteBrandRequest deleteBrandRequest);
 Result update(UpdateBrandRequest updateBrandRequest);
-DataResult<List<GetAllBrandResponse>> getall();
+DataResult<List<GetAllBrandResponse>> getAll();
 DataResult<Brand> getById(GetBrandResponse getBrandResponce);
+
 
 }

@@ -11,5 +11,5 @@ public class UpdateAdditionalItemRequest {
 	private int id;
 	private String name;
 	private String description;
-	private Integer price;
+	private double price;
 }

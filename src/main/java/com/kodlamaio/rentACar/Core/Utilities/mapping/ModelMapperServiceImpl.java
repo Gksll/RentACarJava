@@ -12,7 +12,6 @@ public class ModelMapperServiceImpl implements ModelMapperService{
 	
 	
 	public ModelMapperServiceImpl(ModelMapper modelMapper) {
-		super();
 		this.modelMapper = modelMapper;
 	}
 

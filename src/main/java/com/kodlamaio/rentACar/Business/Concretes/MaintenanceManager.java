@@ -16,6 +16,7 @@ import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessDataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
+import com.kodlamaio.rentACar.Core.Utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CarRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.MaintenanceRepository;
@@ -24,59 +25,83 @@ import com.kodlamaio.rentACar.Entities.Concretes.Maintenance;
 
 @Service
 public class MaintenanceManager implements MaintenanceService {
-	private MaintenanceRepository maintenanceRepository;
-	private CarRepository carRepository;
-	private ModelMapperService modelmapperService;
-
 	@Autowired
-	public MaintenanceManager(MaintenanceRepository maintenanceRepository, CarRepository carRepository,ModelMapperService modelmapperService) {
-		this.maintenanceRepository = maintenanceRepository;
-		this.carRepository = carRepository;
-		this.modelmapperService=modelmapperService;
-	}
+	private MaintenanceRepository maintenanceRepository;
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private ModelMapperService modelmapperService;
 
 	@Override
 	public Result add(CreateMaintenanceRequest createMaintenanceRequest) {
+		checkCar(createMaintenanceRequest.getCarId());
+		checkCarMaintenancesState(createMaintenanceRequest.getCarId());
 		Maintenance maintenance = this.modelmapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
-		Car carToUpdate = new Car();
-		carToUpdate = carRepository.findById(createMaintenanceRequest.getCarId()).get();
-		carToUpdate.setState("maintenance");
 		maintenanceRepository.save(maintenance);
-		carRepository.save(carToUpdate);
-		return new SuccessResult("Bakım başarıyla eklenmiştir");
+		changeCarState(maintenance.getCar().getId());
+		return new SuccessResult("maintenance added successfully");
 	}
 
 	@Override
 	public Result delete(DeleteMaintenanceRequest deleteMaintenanceRequest) {
+		checkIfMaintenancesExistsById(deleteMaintenanceRequest.getId());
 		maintenanceRepository.deleteById(deleteMaintenanceRequest.getId());
-		return new SuccessResult();
+		return new SuccessResult("maintenance deleted successfully");
 	}
 
 	@Override
 	public Result update(UpdateMaintenanceRequest updateMaintenanceRequest) {
+		checkIfMaintenancesExistsById(updateMaintenanceRequest.getId());
 		Maintenance maintenance = this.modelmapperService.forRequest().map(updateMaintenanceRequest, Maintenance.class);
 		maintenanceRepository.save(maintenance);
-		return new SuccessResult();
+		return new SuccessResult("maintenance updated successfully");
 	}
 
 	@Override
 	public DataResult<Maintenance> getById(GetMaintenanceResponse maintenanceResponse) {
-		Maintenance maintenanceToGet = this.modelmapperService.forResponce().map(maintenanceResponse, Maintenance.class);
+		checkIfMaintenancesExistsById(maintenanceResponse.getId());
+		Maintenance maintenanceToGet = this.modelmapperService.forResponce().map(maintenanceResponse,
+				Maintenance.class);
 		maintenanceToGet = this.maintenanceRepository.findById(maintenanceResponse.getId()).get();
-		return new SuccessDataResult<Maintenance>(maintenanceToGet);
+		return new SuccessDataResult<Maintenance>(maintenanceToGet, "maintenance listed successfully");
 	}
 
 	@Override
 	public DataResult<List<GetAllMaintenanceResponse>> getAll() {
 		List<Maintenance> maintenances = this.maintenanceRepository.findAll();
-		List<GetAllMaintenanceResponse> responce = maintenances.stream()
-				.map(maintenance -> this.modelmapperService.forResponce().map(maintenance, GetAllMaintenanceResponse.class))
+		List<GetAllMaintenanceResponse> responce = maintenances.stream().map(
+				maintenance -> this.modelmapperService.forResponce().map(maintenance, GetAllMaintenanceResponse.class))
 				.collect(Collectors.toList());
-
-		return new SuccessDataResult<List<GetAllMaintenanceResponse>>(responce);
+		return new SuccessDataResult<List<GetAllMaintenanceResponse>>(responce, "maintenances listed successfully");
 	}
 
-	
+	// Bakım eklendiğinde aracın state bilgisini günceller.
+	private void changeCarState(int id) {
+		Car carToUpdate = carRepository.findById(id).get();
+		carToUpdate.setState("maintenance");
+		carRepository.save(carToUpdate);
+	}
 
-
+	// Aracı eklemeden state bilgisini kontrol eder.
+	private void checkCarMaintenancesState(int carId) {
+		Car carToCheck = carRepository.findById(carId).get();
+		if (carToCheck.getState().equals("maintenance")) {
+			throw new BusinessException("THE CAR ALREADY IN MAINTENANCES");
+		}
+	}
+	// olmayan bakımlar için işlem (delete,update,getbyid) olmaması adına kontrol
+	// sağlar.
+	private void checkIfMaintenancesExistsById(int id) {
+		boolean result = maintenanceRepository.existsById(id);
+		if (result == false) {
+			throw new BusinessException("MAINTENANCE NOT EXISTS");
+		}
+	}
+	// var olmayan araç bakıma gönderilemez, kontrolü sağlandı.
+	private void checkCar(int carId) {
+		boolean result = carRepository.existsById(carId);
+		if (result == false) {
+			throw new BusinessException("THE CAR DOESNT EXIST");
+		}
+	}
 }

@@ -17,16 +17,13 @@ import com.kodlamaio.rentACar.Business.Requests.car.UpdateCarRequest;
 import com.kodlamaio.rentACar.Business.Responces.car.GetAllCarResponce;
 import com.kodlamaio.rentACar.Business.Responces.car.GetCarResponce;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
-import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
-
-import lombok.var;
 
 @RestController
 @RequestMapping("api/cars")
 public class CarsController {
+	
 	private CarService carService;
 
 	public CarsController(CarService carService) {
@@ -34,37 +31,27 @@ public class CarsController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCarRequest createcarRequest) {
-		var result = carService.add(createcarRequest);
-		if (result.isSuccess()) {
-			return new SuccessResult();
-		}
-		return new ErrorResult();
-
+	public Result Add(@RequestBody @Valid CreateCarRequest createcarRequest) {
+		return	carService.add(createcarRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateCarRequest updatecarRequest) {
-		var result = carService.update(updatecarRequest);
-		if (result.isSuccess()) {
-			return new SuccessResult("güncelledim");
-		}
-		return new ErrorResult("hata");
+	public Result Update(@RequestBody UpdateCarRequest updatecarRequest) {
+		return carService.update(updatecarRequest);
 	}
-
+	
 	@PostMapping("/delete")
-	public Result delete(@RequestBody DeleteCarRequest deleteCarRequest) {
-		carService.delete(deleteCarRequest);
-		return new SuccessResult();
+	public Result Delete(DeleteCarRequest deleteCarRequest) {
+		return carService.delete(deleteCarRequest);
 	}
 
-	@GetMapping("/getbyid")
-	public DataResult<Car> getById(@RequestBody GetCarResponce getCarResponce) {
+	@GetMapping("/getById")
+	public DataResult<Car> GetById( GetCarResponce getCarResponce) {
 		return this.carService.getById(getCarResponce);
 	}
 
-	@GetMapping("/getall")
-	public DataResult<List<GetAllCarResponce>> getAll() {
+	@GetMapping("/getAll")
+	public DataResult<List<GetAllCarResponce>> GetAll() {
 		return this.carService.getAll();
 	}
 

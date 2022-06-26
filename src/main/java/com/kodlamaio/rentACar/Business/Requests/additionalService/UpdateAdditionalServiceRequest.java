@@ -1,5 +1,7 @@
 package com.kodlamaio.rentACar.Business.Requests.additionalService;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class UpdateAdditionalServiceRequest {
 	private int id;
 	private int day;
+	private int additionalItemId;
 	private double totalPrice;
-	private int carId;
+	private Date sendDate;
+	private Date returnDate;
 }

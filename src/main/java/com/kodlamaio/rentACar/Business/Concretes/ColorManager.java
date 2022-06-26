@@ -23,62 +23,64 @@ import com.kodlamaio.rentACar.Entities.Concretes.Color;
 
 @Service
 public class ColorManager implements ColorService {
-
-	private ColorRepository colorRepository;
-	private ModelMapperService modelmapperService;
-
 	@Autowired
-	public ColorManager(ColorRepository colorRepository, ModelMapperService modelmapperService) {
-		this.colorRepository = colorRepository;
-		this.modelmapperService = modelmapperService;
-	}
-
+	private ColorRepository colorRepository;
+	@Autowired
+	private ModelMapperService modelmapperService;
+	
 	@Override
 	public Result add(CreateColorRequest createColorRequest) {
 		checkIfColorExistsByName(createColorRequest.getName());
-		Color color = this.modelmapperService.forRequest().map(createColorRequest, Color.class);
+		Color color = modelmapperService.forRequest().map(createColorRequest, Color.class);
 		colorRepository.save(color);
-		return new SuccessResult(color.getName() + " başarıyla eklendi");
-
+		return new SuccessResult(color.getName()+" added successfully");
 	}
 
 	@Override
 	public Result delete(DeleteColorRequest deleteColorRequest) {
+		checkIfColorExistsById(deleteColorRequest.getId());
 		colorRepository.deleteById(deleteColorRequest.getId());
-		return new SuccessResult();
-
+		return new SuccessResult(deleteColorRequest.getId()+" deleted successfully");
 	}
 
 	@Override
 	public DataResult<List<GetAllColorResponse>> getAll() {
-		List<Color> colors = this.colorRepository.findAll();
+		List<Color> colors = colorRepository.findAll();
 		List<GetAllColorResponse> responce = colors.stream()
-				.map(color -> this.modelmapperService.forResponce().map(color, GetAllColorResponse.class))
+				.map(color -> modelmapperService.forResponce().map(color, GetAllColorResponse.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetAllColorResponse>>(responce);
+		return new SuccessDataResult<List<GetAllColorResponse>>(responce,"the colors successfully listed");
 	}
 
 	@Override
 	public DataResult<Color> getById(GetColorResponse getColorResponse) {
-		Color color = this.modelmapperService.forResponce().map(getColorResponse, Color.class);
+		checkIfColorExistsById(getColorResponse.getId());
+		Color color = modelmapperService.forResponce().map(getColorResponse, Color.class);
 		color=colorRepository.findById(getColorResponse.getId()).get();
-		return new SuccessDataResult<Color>(color);
+		return new SuccessDataResult<Color>(color,"the color was successfully listed");
 	}
 
 	@Override
 	public Result update(UpdateColorRequest updateColorRequest) {
-		Color colorToUpdate = this.modelmapperService.forRequest().map(updateColorRequest, Color.class);
+		checkIfColorExistsById(updateColorRequest.getId());
+		Color colorToUpdate = modelmapperService.forRequest().map(updateColorRequest, Color.class);
 		colorRepository.save(colorToUpdate);
-		return new SuccessResult();
+		return new SuccessResult("the color was successfully updated");
 	}
 	
 	private void checkIfColorExistsByName(String name) 
 	{
-		Color currentColor = this.colorRepository.findByName(name);
+		Color currentColor = colorRepository.findByName(name);
 		if (currentColor!=null) {
-			throw new BusinessException("COLOR EXİSTS");
+			throw new BusinessException("COLOR EXISTS");
 		}
-		
+	}
+	private void checkIfColorExistsById(int id) 
+	{
+		boolean result = colorRepository.existsById(id);
+		if (result==false) {
+			throw new BusinessException("COLOR NOT EXISTS");
+		}
 	}
 }

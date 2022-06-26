@@ -37,7 +37,7 @@ public class InvoiceManager implements InvoiceService {
 			return new SuccessResult("Fatura eklendi");
 		}
 
-		return new ErrorResult("Fatura zaten var, numara kontrolü yap!");
+		return new ErrorResult("Fatura numarası kayıtlı, numara kontrolü yap!");
 	}
 
 	@Override
@@ -51,12 +51,13 @@ public class InvoiceManager implements InvoiceService {
 		}
 		return state;
 	}
-
 	@Override
 	public Result cancelInvoice(StateUpdateInvoiceRequest stateUpdateInvoiceRequest) {
 		Invoice invoice = modelMapperService.forRequest().map(stateUpdateInvoiceRequest, Invoice.class);
 		if (checkIfInvoicesNumber(invoice.getInvoiceNumber())) {
+			invoice.setRentalDetail(rentalDetailRepository.findById(stateUpdateInvoiceRequest.getId()).get());
 			invoice.setState(false);
+			invoice.setRentalDetail(stateUpdateInvoiceRequest.getRentalDetail());
 			invoiceRepository.save(invoice);
 			return new SuccessResult("Fatura pasife geçilmiştir.");
 		}

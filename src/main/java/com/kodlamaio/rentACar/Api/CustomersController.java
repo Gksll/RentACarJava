@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,64 +18,57 @@ import com.kodlamaio.rentACar.Business.Requests.customer.UpdateCustomerRequest;
 import com.kodlamaio.rentACar.Business.Responces.customer.GetAllCustomerResponse;
 import com.kodlamaio.rentACar.Business.Responces.customer.GetCustomerResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
-import com.kodlamaio.rentACar.Core.Utilities.Results.ErrorResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Customer;
-
-import lombok.var;
 
 @RestController
 @RequestMapping("api/customers")
 public class CustomersController {
-	@Autowired
+
 	private CustomerService customerService;
 	
 
+	public CustomersController(CustomerService customerService) {
+		this.customerService = customerService;
+	}
+
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCustomerRequest createCustomerRequest) {
-		var result = customerService.add(createCustomerRequest);
-		if (result.isSuccess()) {
-			return new SuccessResult(result.getMessage());
-		} else {
-			return new ErrorResult(result.getMessage());
-		}
+	public Result Add(@RequestBody @Valid CreateCustomerRequest createCustomerRequest) {
+		return customerService.add(createCustomerRequest);
 	}
 
 	@PostMapping("/delete")
-	public Result delete(DeleteCustomerRequest deleteCustomerRequest) {
-		customerService.delete(deleteCustomerRequest);
-		return new SuccessResult();
+	public Result Delete(DeleteCustomerRequest deleteCustomerRequest) {
+		return customerService.delete(deleteCustomerRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateCustomerRequest updateCustomerRequest) {
-		customerService.update(updateCustomerRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateCustomerRequest updateCustomerRequest) {
+		return	customerService.update(updateCustomerRequest);
 	}
 
-	@GetMapping("/getall")
+	@GetMapping("/getAll")
 	public DataResult<List<GetAllCustomerResponse>> GetAll() {
-		return this.customerService.getAll();
+		return customerService.getAll();
 	}
 
-	@GetMapping("/getbyid")
+	@GetMapping("/getById")
 	public DataResult<Customer> GetById(GetCustomerResponse getCustomerResponse) {
-		return this.customerService.getById(getCustomerResponse);
+		return customerService.getById(getCustomerResponse);
 	}
 	
-	@GetMapping("/getaddressbycustomerid")
+	@GetMapping("/getAddressByCustomerId")
 	public DataResult<String> GetAddressByCustomerId(GetCustomerResponse getCustomerResponse) {
-		return this.customerService.GetAddressByCustomerId(getCustomerResponse);
+		return customerService.GetAddressByCustomerId(getCustomerResponse);
 	}
 	
-	@GetMapping("/getinvoicesaddressbycustomerid")
+	@GetMapping("/getInvoicesAddressByCustomerId")
 	public DataResult<String> GetInvoiceAddressByCustomerId(GetCustomerResponse getCustomerResponse) {
-		return this.customerService.GetInvoicesAddressByCustomerId(getCustomerResponse);
+		return customerService.GetInvoicesAddressByCustomerId(getCustomerResponse);
 	}
 
-	@GetMapping("/getallbypage")
-	public DataResult<List<GetAllCustomerResponse>> getAll(@RequestParam int pageNo, int pageSize) {
-		return this.customerService.getAll(pageNo, pageSize);
+	@GetMapping("/getAllByPage")
+	public DataResult<List<GetAllCustomerResponse>> GetAll(@RequestParam int pageNo, int pageSize) {
+		return customerService.getAll(pageNo, pageSize);
 	}
 }

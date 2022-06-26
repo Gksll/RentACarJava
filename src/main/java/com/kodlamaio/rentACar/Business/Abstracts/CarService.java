@@ -17,5 +17,4 @@ Result delete(DeleteCarRequest deleteCarRequest);
 Result update(UpdateCarRequest updateCarRequest);
 DataResult<Car> getById(GetCarResponce getCarResponce);
 DataResult<List<GetAllCarResponce>> getAll();
-int checkBrands(Car car);
 }

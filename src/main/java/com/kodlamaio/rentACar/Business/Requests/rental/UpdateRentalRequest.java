@@ -16,5 +16,5 @@ public class UpdateRentalRequest {
 	private double totalDays;
 	private double totalPrice;
 	private int carId;
-	private int additionalServiceId;
+	private int customerId;
 }

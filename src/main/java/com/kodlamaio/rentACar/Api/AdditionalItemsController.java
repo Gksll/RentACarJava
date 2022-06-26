@@ -16,46 +16,42 @@ import com.kodlamaio.rentACar.Business.Responces.additionalItem.GetAdditionalIte
 import com.kodlamaio.rentACar.Business.Responces.additionalItem.GetAllAdditionalItemResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.AdditionalItem;
 
 @RestController
 @RequestMapping("api/additionalItem")
 public class AdditionalItemsController {
-	private AdditionalItemService additionalService;
+	
+	private AdditionalItemService additionalService;	
 
 	public AdditionalItemsController(AdditionalItemService additionalService) {
 		this.additionalService = additionalService;
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateAdditionalItemRequest createAdditionalItemRequest) {
-		additionalService.add(createAdditionalItemRequest);
-		return new SuccessResult();
+	public Result Add(@RequestBody CreateAdditionalItemRequest createAdditionalItemRequest) {
+		return additionalService.add(createAdditionalItemRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateAdditionalItemRequest updateAdditionalItemRequest) {
-		additionalService.update(updateAdditionalItemRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateAdditionalItemRequest updateAdditionalItemRequest) {
+		return additionalService.update(updateAdditionalItemRequest);
 	}
 
 	@PostMapping("/delete")
-	public Result update(@RequestBody DeleteAdditionalItemRequest deleteAdditionalItemRequest) {
-		additionalService.delete(deleteAdditionalItemRequest);
-		return new SuccessResult();
+	public Result Delete( DeleteAdditionalItemRequest deleteAdditionalItemRequest) {
+		return additionalService.delete(deleteAdditionalItemRequest);
 	}
 
-	@GetMapping("/getbyid")
-	public DataResult<AdditionalItem> getbyid(@RequestBody GetAdditionalItemResponse getAdditionalItemResponse) {
+	@GetMapping("/getById")
+	public DataResult<AdditionalItem> GetById( GetAdditionalItemResponse getAdditionalItemResponse) {
 
-		return this.additionalService.getById(getAdditionalItemResponse);
+		return additionalService.getById(getAdditionalItemResponse);
 	}
-	
-	@GetMapping("/getall")
-	public DataResult<List<GetAllAdditionalItemResponse>> getall() {
 
-		return this.additionalService.getAll();
+	@GetMapping("/getAll")
+	public DataResult<List<GetAllAdditionalItemResponse>> getAll() {
+		return additionalService.getAll();
 	}
 
 }

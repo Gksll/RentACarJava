@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,16 +18,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars"})
+// mapping işlemi yaparak bu koda gerek kalmıyor.
+//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars"})
 @Table(name="brands")
 public class Brand {
 	@Id()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
+	
 	@Column(name="name")
 	private String name;
-	// olduğun yer one (brand) to Many (cars)
+	
 	@OneToMany(mappedBy = "brand")
 	List<Car> cars;
 

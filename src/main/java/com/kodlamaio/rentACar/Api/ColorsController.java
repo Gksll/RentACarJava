@@ -1,7 +1,5 @@
 package com.kodlamaio.rentACar.Api;
 
-
-
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +16,12 @@ import com.kodlamaio.rentACar.Business.Responces.color.GetAllColorResponse;
 import com.kodlamaio.rentACar.Business.Responces.color.GetColorResponse;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
-import com.kodlamaio.rentACar.Core.Utilities.Results.SuccessResult;
 import com.kodlamaio.rentACar.Entities.Concretes.Color;
 
 @RestController
 @RequestMapping("api/colors")
 public class ColorsController {
+
 	private ColorService colorService;
 
 	public ColorsController(ColorService colorService) {
@@ -31,30 +29,27 @@ public class ColorsController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateColorRequest createColorRequest) {
-		colorService.add(createColorRequest);
-		return new SuccessResult();
+	public Result Add(@RequestBody CreateColorRequest createColorRequest) {
+		return colorService.add(createColorRequest);
 	}
+
 	@PostMapping("/delete")
-	public Result delete(DeleteColorRequest deleteColorRequest) {
-		colorService.delete(deleteColorRequest);
-		return new SuccessResult();
+	public Result Delete(DeleteColorRequest deleteColorRequest) {
+		return colorService.delete(deleteColorRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateColorRequest updateColorRequest) {
-		colorService.update(updateColorRequest);
-		return new SuccessResult();
+	public Result Update(@RequestBody UpdateColorRequest updateColorRequest) {
+		return colorService.update(updateColorRequest);
 	}
 
-	@GetMapping("/getall")
+	@GetMapping("/getAll")
 	public DataResult<List<GetAllColorResponse>> GetAll() {
-		return this.colorService.getAll();
-//		return new SuccessDataResult<List<GetAllColorResponse>>(colorService.getAll().getData());
+		return colorService.getAll();
 	}
-	@GetMapping("/getbyid")
+
+	@GetMapping("/getById")
 	public DataResult<Color> GetById(GetColorResponse getColorResponse) {
-		return this.colorService.getById(getColorResponse);
-//		return new SuccessDataResult<Color>(colorService.getById(id).getData());
+		return colorService.getById(getColorResponse);
 	}
 }

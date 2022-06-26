@@ -11,9 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","maintenances","rentals","additionalServices"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","maintenances","rentals","additionalServices"})
 
 @Table(name = "cars")
 public class Car {
@@ -44,13 +41,14 @@ public class Car {
 
 	@Column(name = "plaque")
 	private String plaque;
+	
 	@Column(name = "min_findex")
 	private int minFindexScore;
 	
-	@Column(name = "pickupCityId")
+	@Column(name = "pickup_city_id")
 	private Integer pickupCityId;
 	
-	@Column(name = "returnCityId")
+	@Column(name = "return_city_id")
 	private Integer returnCityId;
 	
 	@Column(name = "kmcount")
@@ -67,8 +65,6 @@ public class Car {
 	@OneToMany(mappedBy = "car")
 	List<Maintenance> maintenances;
 	
-	
 	@OneToMany(mappedBy = "car")
 	List<Rental> rentals;
-	
 }
