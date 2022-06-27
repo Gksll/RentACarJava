@@ -52,7 +52,9 @@ public class Rental {
 	private Car car;
 	
 	@OneToMany(mappedBy = "rental")
-	private List<RentalDetail> rentalDetail;
+	List<IndividualInvoice> individualInvoices;
 	
+	@OneToMany(mappedBy = "rental")
+	List<CorporateInvoice> corporateInvoices ;
 
 }

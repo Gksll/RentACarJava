@@ -44,12 +44,9 @@ public class AdditionalService {
 	private Date returnDate;
 	
 	@ManyToOne
-	@JoinColumn(name = "additionalItem_id")
+	@JoinColumn(name = "additional_item_id")
 	private AdditionalItem additionalItem;
 	
 	@OneToMany(mappedBy = "additionalService")
-	private List<RentalDetail> rentalDetail;
-	
-	
-	
+	List<Invoice> invoices;
 }

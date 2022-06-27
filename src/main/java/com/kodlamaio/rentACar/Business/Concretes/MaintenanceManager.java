@@ -1,6 +1,8 @@
 package com.kodlamaio.rentACar.Business.Concretes;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ public class MaintenanceManager implements MaintenanceService {
 	public Result add(CreateMaintenanceRequest createMaintenanceRequest) {
 		checkCar(createMaintenanceRequest.getCarId());
 		checkCarMaintenancesState(createMaintenanceRequest.getCarId());
+		diffDay(createMaintenanceRequest.getSendDate(),createMaintenanceRequest.getReturnDate());
 		Maintenance maintenance = this.modelmapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
 		maintenanceRepository.save(maintenance);
 		changeCarState(maintenance.getCar().getId());
@@ -52,6 +55,7 @@ public class MaintenanceManager implements MaintenanceService {
 	@Override
 	public Result update(UpdateMaintenanceRequest updateMaintenanceRequest) {
 		checkIfMaintenancesExistsById(updateMaintenanceRequest.getId());
+		diffDay(updateMaintenanceRequest.getSendDate(),updateMaintenanceRequest.getReturnDate());
 		Maintenance maintenance = this.modelmapperService.forRequest().map(updateMaintenanceRequest, Maintenance.class);
 		maintenanceRepository.save(maintenance);
 		return new SuccessResult("maintenance updated successfully");
@@ -85,8 +89,8 @@ public class MaintenanceManager implements MaintenanceService {
 	// Aracı eklemeden state bilgisini kontrol eder.
 	private void checkCarMaintenancesState(int carId) {
 		Car carToCheck = carRepository.findById(carId).get();
-		if (carToCheck.getState().equals("maintenance")) {
-			throw new BusinessException("THE CAR ALREADY IN MAINTENANCES");
+		if (!carToCheck.getState().equals("avaliable")) {
+			throw new BusinessException("THE CAR NOT READY FOR UNDERMAINTENANCES");
 		}
 	}
 	// olmayan bakımlar için işlem (delete,update,getbyid) olmaması adına kontrol
@@ -102,6 +106,16 @@ public class MaintenanceManager implements MaintenanceService {
 		boolean result = carRepository.existsById(carId);
 		if (result == false) {
 			throw new BusinessException("THE CAR DOESNT EXIST");
+		}
+	}
+	private int diffDay(Date pickupDate, Date returnDate) {
+		long diff = returnDate.getTime() - pickupDate.getTime();
+		if (diff < 0) {
+			throw new BusinessException("CHECK THE DATE");
+		} else {
+			long time = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+			int days = (int) time;
+			return days;
 		}
 	}
 }

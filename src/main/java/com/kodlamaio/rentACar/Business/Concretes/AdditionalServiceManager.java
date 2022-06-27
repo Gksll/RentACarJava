@@ -95,8 +95,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 			throw new BusinessException("ADDITIONAL ITEM NOT EXISTS");
 		}
 	}
-	private int diffDay(Date rentDate, Date returnDate) {
-		long diff = returnDate.getTime() - rentDate.getTime();
+	private int diffDay(Date sendDate, Date returnDate) {
+		long diff = returnDate.getTime() - sendDate.getTime();
 		if (diff < 0) {
 			throw new BusinessException("CHECK THE DATE");
 		} else {

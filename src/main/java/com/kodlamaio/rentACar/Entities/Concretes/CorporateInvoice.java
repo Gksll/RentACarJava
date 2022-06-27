@@ -1,11 +1,8 @@
 package com.kodlamaio.rentACar.Entities.Concretes;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,14 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "customers")
-public class Customer extends User {
+@Table(name = "corporate_invoices")
+public class CorporateInvoice extends Invoice {
 	@JsonIgnore
-	@OneToMany(mappedBy = "customer")
-	private List<Rental> rentals;
-	
-	@ManyToOne()
-	@JoinColumn(name = "address")
-	private Address address;
+	@ManyToOne
+	@JoinColumn(name = "corporate_customer_id")
+	private CorporateCustomer corporateCustomer;
 
 }

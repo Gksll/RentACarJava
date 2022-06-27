@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "invoices")
 public class Invoice {
 	@Id
@@ -34,7 +37,12 @@ public class Invoice {
 	private boolean state;
 	
 	@ManyToOne
-	@JoinColumn(name = "rental_details_id")
-	private RentalDetail rentalDetail;
+	@JoinColumn(name = "additional_service_id")
+	private AdditionalService additionalService;
+	
+	@ManyToOne
+	@JoinColumn(name = "rental_id")
+	private Rental rental;
+	
 	
 }

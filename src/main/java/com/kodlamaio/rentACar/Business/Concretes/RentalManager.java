@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import com.kodlamaio.rentACar.Business.Abstracts.RentalService;
@@ -23,11 +22,11 @@ import com.kodlamaio.rentACar.Core.Utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.Core.webservices.FindexServiceAdapter;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CarRepository;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.IndividualCustomerRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
-import com.kodlamaio.rentACar.DataAccess.Abstracts.CustomerRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
+import com.kodlamaio.rentACar.Entities.Concretes.IndividualCustomer;
 import com.kodlamaio.rentACar.Entities.Concretes.Rental;
-import com.kodlamaio.rentACar.Entities.Concretes.Customer;
 
 @Service
 public class RentalManager implements RentalService {
@@ -41,7 +40,7 @@ public class RentalManager implements RentalService {
 	@Autowired
 	private FindexServiceAdapter adapter;
 	@Autowired
-	private CustomerRepository customerRepository;
+	private IndividualCustomerRepository individualCustomerRepository;
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
@@ -49,11 +48,11 @@ public class RentalManager implements RentalService {
 		checkIfCustomersExistsById(createRentalRequest.getCustomerId());// Kiralayacağımız müşteri gerçek mi?
 		checkCarState(createRentalRequest.getCarId());// araç durumu müsait mi?
 		Rental rentalToAdd = this.modelmapperService.forRequest().map(createRentalRequest, Rental.class);
-		Customer customer = this.customerRepository.findById(createRentalRequest.getCustomerId()).get();
+		IndividualCustomer individualCustomer = this.individualCustomerRepository.findById(createRentalRequest.getCustomerId()).get();
 		Car carToGet = carRepository.findById(rentalToAdd.getCar().getId()).get();
 		rentalToAdd.setTotalDays(diffDay(rentalToAdd.getPickupDate(), rentalToAdd.getReturnDate()));// tarih farkı
 																									// hesapla
-		checkFindexMinValue(carToGet.getMinFindexScore(), customer.getTcNo());// findex puan kontrolü
+		checkFindexMinValue(carToGet.getMinFindexScore(), individualCustomer.getIdentityNumber());// findex puan kontrolü
 
 		if (checkCarCityState(rentalToAdd.getCar().getId())) {
 
@@ -78,11 +77,8 @@ public class RentalManager implements RentalService {
 		Car carToGet = carRepository.findById(rentalToUpdate.getCar().getId()).get();
 		rentalToUpdate.setTotalDays(diffDay(updateRentalRequest.getPickupDate(), updateRentalRequest.getReturnDate()));
 		if (checkCarCityState(rentalToUpdate.getCar().getId())) {
-
 			rentalToUpdate.setTotalPrice((rentalToUpdate.getTotalDays() * carToGet.getDailyPrice()) + 750);
-
 		} else {
-
 			rentalToUpdate.setTotalPrice((rentalToUpdate.getTotalDays() * carToGet.getDailyPrice()));
 		}
 		changeCarStateForUpdate(updateRentalRequest.getId());// araç değişirse ,eski araç durum değiştir
@@ -173,7 +169,7 @@ public class RentalManager implements RentalService {
 
 	// Güncellemelede ve eklemede olmayan müşteri kontrolü sağlar.
 	private void checkIfCustomersExistsById(int id) {
-		boolean result = customerRepository.existsById(id);
+		boolean result = individualCustomerRepository.existsById(id);
 		if (result == false) {
 			throw new BusinessException("CUSTOMER NOT EXISTS");
 		}

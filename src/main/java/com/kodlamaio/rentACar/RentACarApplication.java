@@ -29,7 +29,7 @@ public class RentACarApplication {
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}
-// Spring jpa paging
+
 	@ExceptionHandler
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public ErrorDataResult<Object> handleValidationExceptions(

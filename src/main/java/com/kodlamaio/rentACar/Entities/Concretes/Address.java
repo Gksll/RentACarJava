@@ -33,4 +33,5 @@ public class Address {
 	
 	@OneToMany(mappedBy = "address")
 	private List<Customer> customers;
+	
 }
