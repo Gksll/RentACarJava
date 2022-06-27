@@ -10,4 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetIndividualInvoiceResponce {
 	private int id;
+	private int invoiceNumber;
+	private double totalPrice;
+	private boolean state;
+	private int additionalServiceId;
+	private int rentalId;
+	private int individualCustomerId;
 }

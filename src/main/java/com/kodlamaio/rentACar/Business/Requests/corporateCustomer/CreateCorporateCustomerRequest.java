@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCorporateCustomerRequest {
+	private int id;
 	private String companyName;
 	private String email;
 	private String password;
