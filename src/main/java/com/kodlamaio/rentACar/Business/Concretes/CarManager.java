@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.kodlamaio.rentACar.Business.Abstracts.CarService;
@@ -68,7 +70,7 @@ public class CarManager implements CarService {
 		}
 		return new ErrorResult("there can be no more than five cars of the same brand");
 	}
-
+	
 	@Override
 	public DataResult<Car> getById(GetCarResponce getCarResponce) {
 		checkIfCarExistsById(getCarResponce.getId());
@@ -76,13 +78,20 @@ public class CarManager implements CarService {
 		carToGet = this.carRepository.findById(getCarResponce.getId()).get();
 		return new SuccessDataResult<Car>(carToGet, "the car was successfully listed");
 	}
-
+	@Cacheable("cars")
 	@Override
+	
 	public DataResult<List<GetAllCarResponce>> getAll() {
 		List<Car> cars = this.carRepository.findAll();
 		List<GetAllCarResponce> responce = cars.stream()
 				.map(Car -> this.modelmapperService.forResponce().map(Car, GetAllCarResponce.class))
 				.collect(Collectors.toList());
+		try {
+			Thread.sleep(1000 * 4);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new SuccessDataResult<List<GetAllCarResponce>>(responce, "the cars successfully listed");
 	}
 
@@ -113,5 +122,23 @@ public class CarManager implements CarService {
 			throw new BusinessException("BRAND NOT EXISTS");
 		}
 	}
-
+	
+	public Result MappingExample(CreateCarRequest createCarRequest) {
+		checkIfColorExistsById(createCarRequest.getColorId());
+		checkIfBrandExistsById(createCarRequest.getBrandId());
+		checkIfBrandLimitExceed(createCarRequest.getBrandId());
+//		Car car = this.modelmapperService.forRequest().map(createCarRequest, Car.class);
+		Car car = Car.builder()
+				.dailyPrice(createCarRequest.getDailyPrice())
+				.description(createCarRequest.getDescription())
+				.state(createCarRequest.getState())
+				.plaque(createCarRequest.getPlaque())
+				.minFindexScore(createCarRequest.getMinFindexScore())
+				.kmCount(createCarRequest.getKmCount())
+				.color(colorRepository.findById(createCarRequest.getColorId()).get())
+				.brand(brandRepository.findById(createCarRequest.getBrandId()).get())
+				.build();
+		carRepository.save(car);
+		return new SuccessResult("car added successfully");
+	}
 }

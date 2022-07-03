@@ -2,6 +2,8 @@ package com.kodlamaio.rentACar.Business.Abstracts;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheConfig;
+
 import com.kodlamaio.rentACar.Business.Requests.car.CreateCarRequest;
 import com.kodlamaio.rentACar.Business.Requests.car.DeleteCarRequest;
 import com.kodlamaio.rentACar.Business.Requests.car.UpdateCarRequest;
@@ -10,7 +12,7 @@ import com.kodlamaio.rentACar.Business.Responces.car.GetCarResponce;
 import com.kodlamaio.rentACar.Core.Utilities.Results.DataResult;
 import com.kodlamaio.rentACar.Core.Utilities.Results.Result;
 import com.kodlamaio.rentACar.Entities.Concretes.Car;
-
+@CacheConfig(cacheNames={"cars"})
 public interface CarService {
 Result add(CreateCarRequest createCarRequest);
 Result delete(DeleteCarRequest deleteCarRequest);

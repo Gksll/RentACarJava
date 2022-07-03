@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars","rentals"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","cars","individualRentals"})
 //OrderedAdditionalItem h2 developer
 @Table(name="additional_service")
 

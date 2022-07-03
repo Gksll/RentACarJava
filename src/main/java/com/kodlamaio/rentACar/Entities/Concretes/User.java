@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+//Customerda kalıtım kullanabilmek için joined kalıtımı tercih ettim.
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 	@Id

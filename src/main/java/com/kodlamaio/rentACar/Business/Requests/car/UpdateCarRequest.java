@@ -25,7 +25,5 @@ public class UpdateCarRequest {
 	private String state;
 	private String plaque;
 	private String kmCount;
-	private Integer pickupCityId;
-	private Integer returnCityId;
 	private int minFindexScore;
 }

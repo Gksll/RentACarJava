@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.rentACar.Business.Abstracts.CarService;
@@ -54,5 +56,17 @@ public class CarsController {
 	public DataResult<List<GetAllCarResponce>> GetAll() {
 		return this.carService.getAll();
 	}
-
+	
+	@PostMapping("/lombokTry")
+	public Result MappingExample(@RequestBody @Valid CreateCarRequest createcarRequest) {
+		return	carService.add(createcarRequest);
+	}
+	
+	@RequestMapping(path = "try", method = RequestMethod.GET,
+			produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE} ) 
+	public DataResult<List<GetAllCarResponce>> Gets() {
+		return this.carService.getAll();
+	}
+	
+		
 }

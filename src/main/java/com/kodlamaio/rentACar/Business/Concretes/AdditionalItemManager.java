@@ -71,7 +71,7 @@ public class AdditionalItemManager implements AdditionalItemService {
 	}
 	private void checkIfAdditionalItemExistsByName(String name) 
 	{
-		AdditionalItem currentItem = this.additionalItemRepository.findByName(name);
+		AdditionalItem currentItem = this.additionalItemRepository.getByName(name);
 		if (currentItem!=null) {
 			throw new BusinessException("ADDITIONAL ITEM EXİSTS");
 		}

@@ -20,10 +20,10 @@ import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.AdditionalServiceRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.IndividualCustomerRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.IndividualInvoiceRepository;
-import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.IndividualRentalRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.AdditionalService;
 import com.kodlamaio.rentACar.Entities.Concretes.IndividualInvoice;
-import com.kodlamaio.rentACar.Entities.Concretes.Rental;
+import com.kodlamaio.rentACar.Entities.Concretes.IndividualRental;
 
 @Service
 public class IndividualInvoiceManager implements IndividualInvoiceService {
@@ -34,17 +34,17 @@ public class IndividualInvoiceManager implements IndividualInvoiceService {
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
-	private RentalRepository rentalRepository;
+	private IndividualRentalRepository individualRentalRepository;
 	@Autowired
 	private ModelMapperService modelMapperService;
 	@Override
 	public Result add(CreateIndividualInvoiceRequest createIndividualInvoiceRequest) {
-		checkIfRentalExists(createIndividualInvoiceRequest.getRentalId());
+		checkIfRentalExists(createIndividualInvoiceRequest.getIndividualRentalId());
 		checkIfAdditionalServiceExists(createIndividualInvoiceRequest.getAdditionalServiceId());
 		checkIfIndividualCustomerExists(createIndividualInvoiceRequest.getIndividualCustomerId());
 		IndividualInvoice individualInvoice = modelMapperService.forRequest().map(createIndividualInvoiceRequest, IndividualInvoice.class);
 		individualInvoice.setState(true);
-		individualInvoice.setTotalPrice(CalculateTotalPrice(createIndividualInvoiceRequest.getRentalId(),createIndividualInvoiceRequest.getAdditionalServiceId()));
+		individualInvoice.setTotalPrice(CalculateTotalPrice(createIndividualInvoiceRequest.getIndividualRentalId(),createIndividualInvoiceRequest.getAdditionalServiceId()));
 		individualInvoiceRepository.save(individualInvoice);
 		return new SuccessResult("added successfully");
 	}
@@ -85,7 +85,7 @@ public class IndividualInvoiceManager implements IndividualInvoiceService {
 ////faturaya kiralama eklemeden önce kontrol sağlıyoruz
 	private void checkIfRentalExists(int id)
 	{
-		boolean result = rentalRepository.existsById(id);
+		boolean result = individualRentalRepository.existsById(id);
 		if (result==false) {
 			throw new BusinessException("RENTAL NOT EXIST");
 		}
@@ -118,9 +118,9 @@ public class IndividualInvoiceManager implements IndividualInvoiceService {
 	private double CalculateTotalPrice(int rentalId,int additionalServiceId) 
 	{
 		double totalPrice;
-		Rental rental =rentalRepository.findById(rentalId).get();
+		IndividualRental individualRental =individualRentalRepository.findById(rentalId).get();
 		AdditionalService additionalService = additionalServiceRepository.findById(additionalServiceId).get();
-		totalPrice=rental.getTotalPrice()+additionalService.getTotalPrice();
+		totalPrice=individualRental.getTotalPrice()+additionalService.getTotalPrice();
 		return totalPrice;
 	}
 	

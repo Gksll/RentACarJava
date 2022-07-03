@@ -20,10 +20,10 @@ import com.kodlamaio.rentACar.Core.Utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.AdditionalServiceRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CorporateCustomerRepository;
 import com.kodlamaio.rentACar.DataAccess.Abstracts.CorporateInvoiceRepository;
-import com.kodlamaio.rentACar.DataAccess.Abstracts.RentalRepository;
+import com.kodlamaio.rentACar.DataAccess.Abstracts.IndividualRentalRepository;
 import com.kodlamaio.rentACar.Entities.Concretes.AdditionalService;
 import com.kodlamaio.rentACar.Entities.Concretes.CorporateInvoice;
-import com.kodlamaio.rentACar.Entities.Concretes.Rental;
+import com.kodlamaio.rentACar.Entities.Concretes.IndividualRental;
 
 @Service
 public class CorporateInvoiceManager implements CorporateInvoiceService {
@@ -36,7 +36,7 @@ public class CorporateInvoiceManager implements CorporateInvoiceService {
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
-	private RentalRepository rentalRepository;
+	private IndividualRentalRepository individualRentalRepository;
 	@Autowired
 	private ModelMapperService modelMapperService;
 	
@@ -88,7 +88,7 @@ public class CorporateInvoiceManager implements CorporateInvoiceService {
 ////faturaya kiralama eklemeden önce kontrol sağlıyoruz
 	private void checkIfRentalExists(int id)
 	{
-		boolean result = rentalRepository.existsById(id);
+		boolean result = individualRentalRepository.existsById(id);
 		if (result==false) {
 			throw new BusinessException("RENTAL NOT EXIST");
 		}
@@ -122,9 +122,9 @@ public class CorporateInvoiceManager implements CorporateInvoiceService {
 	private double CalculateTotalPrice(int rentalId,int additionalServiceId) 
 	{
 		double totalPrice;
-		Rental rental =rentalRepository.findById(rentalId).get();
+		IndividualRental individualRental =individualRentalRepository.findById(rentalId).get();
 		AdditionalService additionalService = additionalServiceRepository.findById(additionalServiceId).get();
-		totalPrice=rental.getTotalPrice()+additionalService.getTotalPrice();
+		totalPrice=individualRental.getTotalPrice()+additionalService.getTotalPrice();
 		return totalPrice;
 	}
 	

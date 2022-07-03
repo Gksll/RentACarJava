@@ -49,6 +49,12 @@ public class BrandManager implements BrandService {
 		List<GetAllBrandResponse> responce = brands.stream()
 				.map(brand -> this.modelmapperService.forResponce().map(brand, GetAllBrandResponse.class))
 				.collect(Collectors.toList());
+		 try {
+			Thread.sleep(1000 * 4);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			return new SuccessDataResult<List<GetAllBrandResponse>>(responce," the brands was successfully listed");
 	}
 

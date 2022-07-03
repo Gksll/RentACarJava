@@ -7,5 +7,4 @@ import com.kodlamaio.rentACar.Entities.Concretes.CorporateInvoice;
 @Repository
 public interface CorporateInvoiceRepository extends JpaRepository<CorporateInvoice, Integer> {
 
-	
 }

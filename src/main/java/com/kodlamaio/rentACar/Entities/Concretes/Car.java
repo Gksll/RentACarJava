@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","maintenances","rentals","additionalServices"})
-
+//@JsonIgnoreProperties({"hibernateLazyInitializer","handler","maintenances","individualRentals","additionalServices"})
+@Builder
 @Table(name = "cars")
 public class Car {
 	
@@ -45,11 +46,7 @@ public class Car {
 	@Column(name = "min_findex")
 	private int minFindexScore;
 	
-	@Column(name = "pickup_city_id")
-	private Integer pickupCityId;
 	
-	@Column(name = "return_city_id")
-	private Integer returnCityId;
 	
 	@Column(name = "kmcount")
 	private String kmCount;

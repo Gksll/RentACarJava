@@ -16,6 +16,4 @@ public class GetAllCarResponce {
 	private String state="avaliable";
 	private String plaque;
 	private String kmCount;
-	private Integer pickupCityId;
-	private Integer returnCityId;
 }

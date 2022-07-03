@@ -38,7 +38,7 @@
 ////			  fileWriter.write(log.getDate().toString());
 ////			  fileWriter.write(log.getClassName());
 ////			  fileWriter.write(log.getMethodName());
-////			  fileWriter.write(log.getParameters());
+////	d		  fileWriter.write(log.getParameters());
 ////			  fileWriter.close();
 ////		} catch (Exception e) {
 ////			// TODO: handle exception

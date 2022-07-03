@@ -14,7 +14,7 @@ public class CreateIndividualInvoiceRequest {
 	private double totalPrice;
 	private boolean state;
 	private int additionalServiceId;
-	private int rentalId;
+	private int individualRentalId;
 	private int individualCustomerId;
 	
 }

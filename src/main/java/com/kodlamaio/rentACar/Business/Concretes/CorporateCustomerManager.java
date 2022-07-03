@@ -54,7 +54,6 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
 		checkIfCorporateCustomerExistsById(deleteCorporateCustomerRequest.getId());
 		CorporateCustomer corporateCustomerToDelete =modelMapperService.forRequest().map(deleteCorporateCustomerRequest, CorporateCustomer.class);
-		
 		corporateCustomerRepository.deleteById(corporateCustomerToDelete.getId());
 		return new SuccessResult("deleted successfully");
 	}
@@ -90,7 +89,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	private void checkIfCorporateCustomerExistsById(int id) {
 		boolean result = corporateCustomerRepository.existsById(id);
 		if (result == false) {
-			throw new BusinessException("CUSTOMER NOT EXISTS");
+			throw new BusinessException("CORPORATE CUSTOMER NOT EXISTS");
 		}
 	}
 }

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","additionalService","rental"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","additionalService","individualRental"})
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "invoices")
 public class Invoice {
@@ -42,10 +42,5 @@ public class Invoice {
 	@ManyToOne
 	@JoinColumn(name = "additional_service_id")
 	private AdditionalService additionalService;
-	
-	@ManyToOne
-	@JoinColumn(name = "rental_id")
-	private Rental rental;
-	
 	
 }
